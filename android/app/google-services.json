@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "293943128823",
+    "project_id": "camp-assistant-f0eb5",
+    "storage_bucket": "camp-assistant-f0eb5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:293943128823:android:019b15185cf2b5d8cbd9f2",
+        "android_client_info": {
+          "package_name": "com.example.flutter_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv0VKRKDdgx87YMBGhX1G3vP8xVo48h34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
