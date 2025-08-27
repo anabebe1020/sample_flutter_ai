@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ai/core/utils/transition.dart';
+import 'package:flutter_ai/features/auth/view/sign_in_page.dart';
+import 'package:flutter_ai/features/welcome/model/content.dart';
+import 'package:flutter_ai/features/welcome/provider/current_page_provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-/// wonderousっぽいUIのページ
-/// flutter_animate や flutter_hooks、hooks_riverpod を使用したリファクタ版
-
-// 現在のページインデックスを管理
-final currentPageProvider = StateProvider<int>((ref) => 0);
-
-class WonderousPage extends HookConsumerWidget {
-  const WonderousPage({super.key});
+class WelcomePage extends HookConsumerWidget {
+  const WelcomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageController = usePageController();
     final currentPage = ref.watch(currentPageProvider);
 
-    // ページ変更監視: pageController.page の round を currentPageProvider に反映
     useEffect(() {
       void listener() {
         final page = pageController.page?.round();
@@ -31,7 +28,7 @@ class WonderousPage extends HookConsumerWidget {
       return () => pageController.removeListener(listener);
     }, [pageController]);
 
-    final content = _content; // 下の定義を参照
+    final content = _content;
 
     return Scaffold(
       body: Stack(
@@ -49,7 +46,7 @@ class WonderousPage extends HookConsumerWidget {
             controller: pageController,
             itemCount: content.length,
             itemBuilder: (context, index) {
-              return _WonderousCard(content: content[index], index: index)
+              return _WelcomeCard(content: content[index], index: index)
                   // 1枚ごとにふわっと入る
                   .animate(key: ValueKey(index))
                   .fadeIn(duration: 450.ms)
@@ -70,7 +67,7 @@ class WonderousPage extends HookConsumerWidget {
                       foregroundColor: content[currentPage].textColor,
                     ),
                     onPressed: () {
-                      // スキップボタンが押されたときの処理
+                      push(context, SignInPage(), SignInPage);
                     },
                     child: const Text('スキップ'),
                   ),
@@ -91,46 +88,30 @@ class WonderousPage extends HookConsumerWidget {
   }
 }
 
-class WonderousContent {
-  final String title;
-  final String description;
-  final String imagePath;
-  final Color backgroundColor;
-  final Color textColor;
-
-  WonderousContent({
-    required this.title,
-    required this.description,
-    required this.imagePath,
-    required this.backgroundColor,
-    required this.textColor,
-  });
-}
-
 // 表示データ（元のリストをそのまま移植）
-final List<WonderousContent> _content = [
-  WonderousContent(
+final List<WelcomeContent> _content = [
+  WelcomeContent(
     title: 'プロフィールを設定しよう',
     description: 'キャンプアシスタントもん太があなたにぴったりのキャンププランを提案します！',
     imagePath: 'assets/images/camp_preparation_01.png',
     backgroundColor: Colors.amberAccent,
     textColor: Colors.brown,
   ),
-  WonderousContent(
+  WelcomeContent(
     title: 'どんなキャンプがしたいか答えてみよう',
     description: 'キャンプ場の雰囲気やアクティビティなど、設問に応えるともん太があなたにぴったりのキャンプ場を提案します！',
     imagePath: 'assets/images/camp_fire_01.png',
     backgroundColor: Colors.green.shade200,
     textColor: Colors.brown,
   ),
-  WonderousContent(
+  WelcomeContent(
     title: 'もん太と会話してみよう',
     description: 'もん太と会話して、あなたの理想のキャンプを教えてもらいましょう！',
     imagePath: 'assets/images/camp_cook_01.png',
     backgroundColor: Colors.blueGrey.shade200,
     textColor: Colors.brown,
   ),
-  WonderousContent(
+  WelcomeContent(
     title: 'アプリを使い続けてキャンプをもっと楽しもう',
     description: 'アプリを使い続けると、アプリがあなたのキャンプを学習します。最高のキャンプライフを一緒に楽しみましょう！',
     imagePath: 'assets/images/camp_sleep_01.png',
@@ -139,10 +120,10 @@ final List<WonderousContent> _content = [
   ),
 ];
 
-class _WonderousCard extends HookConsumerWidget {
-  const _WonderousCard({required this.content, required this.index});
+class _WelcomeCard extends HookConsumerWidget {
+  const _WelcomeCard({required this.content, required this.index});
 
-  final WonderousContent content;
+  final WelcomeContent content;
   final int index;
 
   @override
