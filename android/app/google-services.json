@@ -12,7 +12,12 @@
           "package_name": "com.example.flutter_ai"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "293943128823-bf8s9sihltemiqjomn026d7inb5evklt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBv0VKRKDdgx87YMBGhX1G3vP8xVo48h34"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "293943128823-bf8s9sihltemiqjomn026d7inb5evklt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "293943128823-l7dcnejgh3u4g6qrc9j8r1mrfcri9l68.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterAi"
+              }
+            }
+          ]
         }
       }
     }

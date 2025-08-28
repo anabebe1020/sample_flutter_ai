@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ai/features/auth/provider/auth_state_provider.dart';
+import 'package:flutter_ai/features/auth/view/signed_in.dart';
 import 'package:flutter_ai/features/welcome/view/page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -22,9 +23,9 @@ class AuthGate extends ConsumerWidget {
       home: authState.when(
         data: (user) {
           if (user != null) {
-            return Text('Logged in as ${user.email}');
+            return const SignedInRoot();
           } else {
-            return WelcomePage();
+            return const WelcomePage();
           }
         },
         loading: () => const CircularProgressIndicator(),

@@ -24,10 +24,11 @@ class _AuthenticationNotifier extends StateNotifier<AuthenticationState> {
         );
       }
       // サインイン
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      print(credential.user);
     } finally {
       state = state.copyWith(isLoading: false);
     }
