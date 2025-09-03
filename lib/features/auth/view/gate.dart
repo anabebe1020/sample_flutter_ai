@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ai/features/auth/provider/auth_state_provider.dart';
-import 'package:flutter_ai/features/auth/view/signed_in.dart';
-import 'package:flutter_ai/features/welcome/view/page.dart';
+import 'package:flutter_ai/features/route/provider/route_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -11,26 +10,16 @@ class AuthGate extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 認証状態を監視
-    final authState = ref.watch(authStateProvider);
+    final router = ref.watch(routerProvider);
+    print(dotenv.get('GEMINI_API_KEY'));
 
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Camp Assistant',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         fontFamily: GoogleFonts.notoSansJp().fontFamily,
       ),
-      home: authState.when(
-        data: (user) {
-          if (user != null) {
-            return const SignedInRoot();
-          } else {
-            return const WelcomePage();
-          }
-        },
-        loading: () => const CircularProgressIndicator(),
-        error: (error, stack) => Text('Error: $error'),
-      ),
+      routerConfig: router,
     );
   }
 }
