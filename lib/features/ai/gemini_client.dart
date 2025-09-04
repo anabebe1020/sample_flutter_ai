@@ -12,32 +12,39 @@ abstract class AiClient {
     required String system,
     required String user,
     required Uint8List imageBytes,
-    String mimeType = 'image/jpeg',
+    String mimeType,
   });
 }
 
 class GeminiClient implements AiClient {
-  final GenerativeModel _model;
+  final String apiKey;
+  final String modelName;
+  final GenerationConfig _config;
 
-  GeminiClient({required String apiKey, String modelName = 'gemini-1.5-pro'})
-    : _model = GenerativeModel(
-        model: modelName,
-        apiKey: apiKey,
-        generationConfig: GenerationConfig(
-          temperature: 0.4,
-          topK: 32,
-          topP: 0.95,
-          maxOutputTokens: 1024,
-        ),
+  GeminiClient({required this.apiKey, this.modelName = 'gemini-1.5-pro'})
+    : _config = GenerationConfig(
+        temperature: 0.4,
+        topK: 32,
+        topP: 0.95,
+        maxOutputTokens: 1024,
       );
+
+  GenerativeModel _model({String? system}) => GenerativeModel(
+    model: modelName,
+    apiKey: apiKey,
+    generationConfig: _config,
+    // ← ここに systemInstruction を渡す
+    systemInstruction: system == null ? null : Content.text(system),
+  );
 
   @override
   Future<String> generateText({
     required String system,
     required String user,
   }) async {
-    final content = [Content.system(system), Content.text(user)];
-    final res = await _model.generateContent(content);
+    final res = await _model(
+      system: system,
+    ).generateContent([Content.text(user)]);
     return res.text ?? '';
   }
 
@@ -46,13 +53,12 @@ class GeminiClient implements AiClient {
     required String system,
     required String user,
   }) async* {
-    final content = [Content.system(system), Content.text(user)];
-    final stream = _model.generateContentStream(content);
+    final stream = _model(
+      system: system,
+    ).generateContentStream([Content.text(user)]);
     await for (final event in stream) {
       final chunk = event.text;
-      if (chunk != null && chunk.isNotEmpty) {
-        yield chunk;
-      }
+      if (chunk != null && chunk.isNotEmpty) yield chunk;
     }
   }
 
@@ -63,11 +69,9 @@ class GeminiClient implements AiClient {
     required Uint8List imageBytes,
     String mimeType = 'image/jpeg',
   }) async {
-    final content = [
-      Content.system(system),
+    final res = await _model(system: system).generateContent([
       Content.multi([TextPart(user), DataPart(mimeType, imageBytes)]),
-    ];
-    final res = await _model.generateContent(content);
+    ]);
     return res.text ?? '';
   }
 }
