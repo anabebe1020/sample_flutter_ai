@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_ai/features/sample/extract_query_usecase.dart';
 import 'package:flutter_ai/features/sample/recommend_usecase.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -28,38 +29,79 @@ class RecommendScreen extends HookConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('キャンプ提案（AI試作）')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: controller,
-              maxLines: 3,
-              decoration: const InputDecoration(
-                labelText: '要望を入力',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: loading.value ? null : onRun,
-                  child: const Text('提案を生成'),
-                ),
-                const SizedBox(width: 12),
-                if (loading.value) const CircularProgressIndicator(),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: SingleChildScrollView(child: SelectableText(result.value)),
-            ),
-          ],
+      appBar: AppBar(title: const Text('キャンプ場の提案')),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Markdown(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          data: result.value,
+          selectable: true,
         ),
       ),
+      bottomSheet: Container(
+        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+        child: _ChatInput(
+          controller: controller,
+          isLoading: loading.value,
+          onTap: onRun,
+        ),
+      ),
+    );
+  }
+}
+
+/// チャット入力フィールド
+class _ChatInput extends StatelessWidget {
+  final TextEditingController controller;
+  final bool isLoading;
+  final void Function() onTap;
+
+  const _ChatInput({
+    required this.controller,
+    required this.isLoading,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // 入力フィールド
+        TextField(
+          controller: controller,
+          minLines: 1,
+          maxLines: 12,
+          decoration: InputDecoration(
+            isDense: true,
+            filled: true,
+            contentPadding: EdgeInsets.fromLTRB(16, 12, 44, 12),
+            hintText: '要望を入力',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide.none,
+            ),
+            fillColor: Colors.grey.withValues(alpha: 0.1),
+          ),
+        ),
+        // 送信ボタン
+        Positioned(
+          right: 4,
+          bottom: 0,
+          child: isLoading
+              ? SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(),
+                )
+              : IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  iconSize: 18,
+                  icon: const Icon(Icons.send),
+                  onPressed: isLoading ? null : onTap,
+                ),
+        ),
+      ],
     );
   }
 }
