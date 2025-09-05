@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ai/core/utils/error_handler.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_ai/features/sample/extract_query_usecase.dart';
 import 'package:flutter_ai/features/sample/recommend_usecase.dart';
@@ -12,6 +13,7 @@ class RecommendScreen extends HookConsumerWidget {
     final controller = useTextEditingController(
       text: '夏に関東で川遊びができて温泉もある家族向け。車で2時間以内、電源サイト必須',
     );
+    final errorHandler = useErrorHandler();
     final loading = useState(false);
     final result = useState<String>('');
 
@@ -23,6 +25,8 @@ class RecommendScreen extends HookConsumerWidget {
         final recommend = ref.read(recommendUsecaseProvider);
         final md = await recommend.recommend(q);
         result.value = md;
+      } catch (e) {
+        errorHandler.call(e);
       } finally {
         loading.value = false;
       }
