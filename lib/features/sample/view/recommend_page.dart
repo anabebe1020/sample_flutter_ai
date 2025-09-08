@@ -5,6 +5,7 @@ import 'package:flutter_ai/features/sample/extract_query_usecase.dart';
 import 'package:flutter_ai/features/sample/recommend_usecase.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RecommendScreen extends HookConsumerWidget {
   const RecommendScreen({super.key});
@@ -40,6 +41,14 @@ class RecommendScreen extends HookConsumerWidget {
           padding: EdgeInsets.symmetric(vertical: 20),
           data: result.value,
           selectable: true,
+          onTapLink: (text, href, title) async {
+            if (href != null && await canLaunchUrl(Uri.parse(href))) {
+              await launchUrl(
+                Uri.parse(href),
+                mode: LaunchMode.externalApplication,
+              );
+            }
+          },
         ),
       ),
       bottomSheet: Container(

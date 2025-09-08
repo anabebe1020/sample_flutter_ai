@@ -21,7 +21,7 @@ class GeminiClient implements AiClient {
   final String modelName;
   final GenerationConfig _config;
 
-  GeminiClient({required this.apiKey, this.modelName = 'gemini-2.5-flash-lite'})
+  GeminiClient({required this.apiKey, this.modelName = 'gemini-1.5-pro'})
     : _config = GenerationConfig(
         temperature: 0.4,
         topK: 32,
