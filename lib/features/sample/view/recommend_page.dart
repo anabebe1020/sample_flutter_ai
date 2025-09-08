@@ -43,7 +43,8 @@ class RecommendScreen extends HookConsumerWidget {
         ),
       ),
       bottomSheet: Container(
-        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+        color: Colors.white.withValues(alpha: 0.4),
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: _ChatInput(
           controller: controller,
           isLoading: loading.value,
