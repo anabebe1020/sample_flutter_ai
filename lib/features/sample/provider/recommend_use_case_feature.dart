@@ -1,16 +1,16 @@
 import 'package:flutter_ai/features/ai/gemini_client.dart';
 import 'package:flutter_ai/features/ai/provider/gemini_provider.dart';
-import 'package:flutter_ai/features/sample/camp_query.dart';
+import 'package:flutter_ai/features/sample/state/camp_query.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final recommendUsecaseProvider = Provider<RecommendUsecase>((ref) {
+final recommendUseCaseFeatureProvider = Provider<RecommendUseCase>((ref) {
   final ai = ref.watch(aiClientProvider);
-  return RecommendUsecase(ai);
+  return RecommendUseCase(ai);
 });
 
-class RecommendUsecase {
+class RecommendUseCase {
   final AiClient _ai;
-  RecommendUsecase(this._ai);
+  RecommendUseCase(this._ai);
 
   static const _system = '''
 あなたは日本のキャンプコンシェルジュです。

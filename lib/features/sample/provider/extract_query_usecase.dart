@@ -1,17 +1,18 @@
 import 'dart:convert';
+
 import 'package:flutter_ai/features/ai/gemini_client.dart';
 import 'package:flutter_ai/features/ai/provider/gemini_provider.dart';
-import 'package:flutter_ai/features/sample/camp_query.dart';
+import 'package:flutter_ai/features/sample/state/camp_query.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final extractQueryUsecaseProvider = Provider<ExtractQueryUsecase>((ref) {
+final extractQueryUseCaseProvider = Provider<ExtractQueryUseCase>((ref) {
   final ai = ref.watch(aiClientProvider);
-  return ExtractQueryUsecase(ai);
+  return ExtractQueryUseCase(ai);
 });
 
-class ExtractQueryUsecase {
+class ExtractQueryUseCase {
   final AiClient _ai;
-  ExtractQueryUsecase(this._ai);
+  ExtractQueryUseCase(this._ai);
 
   static const _system = '''
 あなたは日本のキャンプ計画アシスタントです。

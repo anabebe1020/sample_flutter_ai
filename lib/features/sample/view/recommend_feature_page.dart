@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ai/core/utils/error_handler.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_ai/features/sample/extract_query_usecase.dart';
-import 'package:flutter_ai/features/sample/recommend_usecase.dart';
+import 'package:flutter_ai/features/sample/provider/extract_query_usecase.dart';
+import 'package:flutter_ai/features/sample/provider/recommend_use_case_feature.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,9 +21,9 @@ class RecommendScreen extends HookConsumerWidget {
     Future<void> onRun() async {
       loading.value = true;
       try {
-        final extract = ref.read(extractQueryUsecaseProvider);
+        final extract = ref.read(extractQueryUseCaseProvider);
         final q = await extract(controller.text);
-        final recommend = ref.read(recommendUsecaseProvider);
+        final recommend = ref.read(recommendUseCaseFeatureProvider);
         final md = await recommend.recommend(q);
         result.value = md;
       } catch (e) {
