@@ -1,5 +1,6 @@
 import 'package:flutter_ai/features/ai/gemini_client.dart';
 import 'package:flutter_ai/features/ai/provider/gemini_provider.dart';
+import 'package:flutter_ai/features/sample/model/recommend_history.dart';
 import 'package:flutter_ai/features/sample/state/camp_query.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -41,7 +42,7 @@ class RecommendUseCase {
 ...同様
 ''';
 
-  Stream<String> recommend(CampQuery q) {
+  Stream<String> recommend(CampQuery q, List<RecommendHistoryModel> history) {
     final user =
         '''
 条件:
@@ -55,6 +56,10 @@ class RecommendUseCase {
 - あれば嬉しい: ${q.niceToHave.join(', ')}
 - 予算メモ: ${q.budgetNote}
 ''';
-    return _ai.streamText(system: _system, user: user);
+
+    final users = history.map(((h) => h.message)).toList();
+    users.add(user);
+
+    return _ai.streamText(system: _system, user: users);
   }
 }

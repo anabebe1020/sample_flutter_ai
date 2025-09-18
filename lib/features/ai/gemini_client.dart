@@ -7,7 +7,10 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 /// Riverpod から使う前提。
 abstract class AiClient {
   Future<String> generateText({required String system, required String user});
-  Stream<String> streamText({required String system, required String user});
+  Stream<String> streamText({
+    required String system,
+    required List<String> user,
+  });
   Future<String> multimodalDescribe({
     required String system,
     required String user,
@@ -51,11 +54,10 @@ class GeminiClient implements AiClient {
   @override
   Stream<String> streamText({
     required String system,
-    required String user,
+    required List<String> user,
   }) async* {
-    final stream = _model(
-      system: system,
-    ).generateContentStream([Content.text(user)]);
+    final contents = user.map((u) => Content.text(u));
+    final stream = _model(system: system).generateContentStream(contents);
     await for (final event in stream) {
       final chunk = event.text;
       if (chunk != null && chunk.isNotEmpty) yield chunk;
